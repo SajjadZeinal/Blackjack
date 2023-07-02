@@ -18,6 +18,9 @@ logo="""
 """
 def score(given_cards):
     total_score = sum(given_cards)
+    if total_score == 21 and len(given_cards) == 2:
+        return 0
+    
     if total_score > 21 and 11 in given_cards:
         given_cards[given_cards.index(11)] = 1
     return sum(given_cards)
@@ -38,6 +41,9 @@ while decision_play:
     computer_cards = [random.choice(cards)]
     print(f"Computer's first card: {computer_cards[0]}")
     while score(your_cards) <= 21:
+        if score(your_cards) == 0:
+            print("You are blackjack!")
+            break
         get_or_pass = input("Type 'y' to get another card, type 'n' to pass: ")
         if get_or_pass == 'y':
            your_cards.append(random.choice(cards))
@@ -46,7 +52,11 @@ while decision_play:
         else:
             break
     computer_cards.append(random.choice(cards))
+
     while score(computer_cards) <= 17:
+        if score(computer_cards) == 0:
+           print("Computer is blackjack!")
+           break
         computer_cards.append(random.choice(cards))
     break
 
@@ -54,8 +64,14 @@ your_final_score = score(your_cards)
 computer_final_score = score(computer_cards)
 
 print(f"Your final hand: {your_cards}, final score: {your_final_score}")
-print(f"Computer's final hand: {computer_cards}, final score: {computer_final_score}")     
-if your_final_score > 21:
+print(f"Computer's final hand: {computer_cards}, final score: {computer_final_score}")  
+if your_final_score == 0 and computer_final_score == 0:
+    print("Draw!")
+elif your_final_score == 0 and computer_final_score != 0:
+    print("You are blackjack.You won.")
+elif your_final_score != 0 and computer_final_score == 0:
+    print("Computer is blackjack.You lost.")
+elif your_final_score > 21:
    print("You went over, You lose.")     
 elif computer_final_score <= 21 and computer_final_score > your_final_score:
    print("Computer won.")
